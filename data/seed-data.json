@@ -1,0 +1,1867 @@
+[
+  {
+    "name": "JavaScript",
+    "description": "A lightweight, interpreted programming language with first-class functions, known as the scripting language for Web pages.",
+    "topics": [
+      {
+        "title": "JavaScript Fundamentals",
+        "content": "\n      <h2>1. JavaScript Engine & Runtime</h2>\n      <p>JavaScript is a high-level, interpreted language. The <strong>Engine</strong> (e.g., V8 in Chrome) parses code, converts it to an Abstract Syntax Tree (AST), and compiles it to machine code via a Just-In-Time (JIT) compiler. The <strong>Runtime</strong> includes the engine, Web APIs (DOM, setTimeout), the Callback Queue, and the Event Loop.</p>\n      \n      <h2>2. Variables (var, let, const)</h2>\n      <ul>\n        <li><code>var</code>: Function-scoped, hoisted and initialized with <code>undefined</code>.</li>\n        <li><code>let</code>: Block-scoped, hoisted but kept in the Temporal Dead Zone (TDZ). Can be reassigned.</li>\n        <li><code>const</code>: Block-scoped, hoisted but kept in TDZ. Cannot be reassigned.</li>\n      </ul>\n      <pre><code>\n// Example\nconsole.log(a); // undefined\nvar a = 5;\n\n// console.log(b); // ReferenceError: Cannot access 'b' before initialization\nlet b = 10;\n      </code></pre>\n\n      <h2>3. Data Types & Equality</h2>\n      <p>Primitives: <code>string, number, boolean, null, undefined, symbol, bigint</code>. Reference types: Objects, Arrays, Functions.</p>\n      <p><strong>== (Loose Equality)</strong> performs type coercion. <strong>=== (Strict Equality)</strong> does not.</p>\n      <pre><code>\nconsole.log(5 == \"5\"); // true\nconsole.log(5 === \"5\"); // false\nconsole.log(typeof null); // \"object\" (historic bug)\n      </code></pre>\n    ",
+        "questions": [
+          {
+            "text": "What is the result of `typeof null` in JavaScript?",
+            "options": [
+              "null",
+              "undefined",
+              "object",
+              "string"
+            ],
+            "correctAnswer": "object",
+            "difficulty": "Easy",
+            "explanation": "Due to a legacy bug in JavaScript, typeof null returns 'object'."
+          },
+          {
+            "text": "Which keyword declares a block-scoped variable that can be reassigned?",
+            "options": [
+              "var",
+              "let",
+              "const",
+              "function"
+            ],
+            "correctAnswer": "let",
+            "difficulty": "Easy",
+            "explanation": "let is block-scoped and allows reassignment, unlike const."
+          },
+          {
+            "text": "What is the output of `[] == ![]`?",
+            "options": [
+              "true",
+              "false",
+              "TypeError",
+              "undefined"
+            ],
+            "correctAnswer": "true",
+            "difficulty": "Medium",
+            "explanation": "![] evaluates to false. [] == false coerces [] to an empty string '', and false to 0. '' == 0 coerces to 0 == 0, which is true."
+          },
+          {
+            "text": "Which of the following describes the Temporal Dead Zone (TDZ)?",
+            "options": [
+              "A time where var declarations are paused",
+              "The period between a let/const declaration and its initialization",
+              "When the event loop is blocked",
+              "A memory leak"
+            ],
+            "correctAnswer": "The period between a let/const declaration and its initialization",
+            "difficulty": "Medium",
+            "explanation": "Variables declared with let and const exist in the TDZ from the start of the block until the declaration is processed."
+          },
+          {
+            "text": "What does a JIT (Just-In-Time) compiler do in the V8 engine?",
+            "options": [
+              "Compiles code to binary on a server",
+              "Interprets code line-by-line without compiling",
+              "Compiles code during execution for optimization",
+              "Transpiles ES6 to ES5"
+            ],
+            "correctAnswer": "Compiles code during execution for optimization",
+            "difficulty": "Hard",
+            "explanation": "JIT compilation combines interpretation and compilation, translating code into machine code during execution and optimizing hot paths."
+          },
+          {
+            "text": "What is the output of `console.log(1 < 2 < 3)` and `console.log(3 > 2 > 1)`?",
+            "options": [
+              "true, true",
+              "false, false",
+              "true, false",
+              "false, true"
+            ],
+            "correctAnswer": "true, false",
+            "difficulty": "Hard",
+            "explanation": "1 < 2 evaluates to true. true < 3 coerces true to 1, so 1 < 3 is true. 3 > 2 evaluates to true. true > 1 coerces true to 1, so 1 > 1 is false."
+          }
+        ],
+        "order": 1
+      },
+      {
+        "title": "Scope & Execution",
+        "content": "\n      <h2>1. Lexical Scope & Scope Chain</h2>\n      <p>JavaScript uses Lexical Scoping, meaning variable scope is determined by where variables and blocks are physically written in the code. When a variable isn't found in the current scope, the engine looks up the <strong>Scope Chain</strong> to the parent scope, all the way to the Global Scope.</p>\n\n      <h2>2. Execution Context</h2>\n      <p>Everything in JS runs inside an Execution Context. The Global Execution Context is created by default. A Function Execution Context is created when a function is invoked.</p>\n      <p><strong>Phase 1: Memory Creation Phase (Hoisting)</strong> - Variables and functions are allocated in memory.</p>\n      <p><strong>Phase 2: Code Execution Phase</strong> - Code is executed line by line.</p>\n\n      <h2>3. Call Stack</h2>\n      <p>The Call Stack manages Execution Contexts using a Last-In-First-Out (LIFO) structure. The currently executing function is always at the top of the stack.</p>\n      <pre><code>\nfunction first() {\n  second();\n  console.log(\"First\");\n}\nfunction second() {\n  console.log(\"Second\");\n}\nfirst(); \n// Output: \"Second\", then \"First\"\n// Stack trace: Global -> first() -> second() -> pop second() -> pop first()\n      </code></pre>\n    ",
+        "questions": [
+          {
+            "text": "What is Lexical Scoping?",
+            "options": [
+              "Scope determined by the function caller at runtime",
+              "Scope determined by where variables are declared in the source code",
+              "Scope that is restricted to the browser window",
+              "Scope determined by the this keyword"
+            ],
+            "correctAnswer": "Scope determined by where variables are declared in the source code",
+            "difficulty": "Easy",
+            "explanation": "Lexical scope means scope is defined at lexing time (compile time) based on where things are physically written."
+          },
+          {
+            "text": "What data structure does the JavaScript engine use to keep track of function execution?",
+            "options": [
+              "Queue",
+              "Linked List",
+              "Tree",
+              "Stack"
+            ],
+            "correctAnswer": "Stack",
+            "difficulty": "Easy",
+            "explanation": "The Call Stack uses a LIFO (Last In, First Out) structure to manage execution contexts."
+          },
+          {
+            "text": "During the Memory Creation Phase of an Execution Context, what value is assigned to `var` declarations?",
+            "options": [
+              "null",
+              "undefined",
+              "The assigned value in the code",
+              "ReferenceError"
+            ],
+            "correctAnswer": "undefined",
+            "difficulty": "Medium",
+            "explanation": "Variables declared with var are hoisted and initially set to undefined during the creation phase."
+          },
+          {
+            "text": "What happens when a variable is not found in the current scope?",
+            "options": [
+              "A ReferenceError is immediately thrown",
+              "The engine looks down the scope chain to child scopes",
+              "The engine looks up the scope chain to parent scopes",
+              "The variable is automatically created in the current scope"
+            ],
+            "correctAnswer": "The engine looks up the scope chain to parent scopes",
+            "difficulty": "Medium",
+            "explanation": "The scope chain defines how variables are resolved. It travels upwards from inner scopes to outer scopes."
+          },
+          {
+            "text": "What is Variable Shadowing?",
+            "options": [
+              "When a variable is hidden by the TDZ",
+              "When an inner scope declares a variable with the same name as an outer scope variable",
+              "When a variable is garbage collected",
+              "When a variable is hoisted"
+            ],
+            "correctAnswer": "When an inner scope declares a variable with the same name as an outer scope variable",
+            "difficulty": "Hard",
+            "explanation": "Shadowing occurs when a local variable shares the same name as a variable in the outer scope, effectively 'hiding' the outer variable."
+          },
+          {
+            "text": "What happens if the Call Stack exceeds its maximum size?",
+            "options": [
+              "The Event Loop crashes",
+              "A RangeError: Maximum call stack size exceeded is thrown",
+              "The browser allocates more memory automatically",
+              "The oldest context is dropped"
+            ],
+            "correctAnswer": "A RangeError: Maximum call stack size exceeded is thrown",
+            "difficulty": "Hard",
+            "explanation": "This is known as a stack overflow, typically caused by infinite recursion, resulting in a RangeError."
+          }
+        ],
+        "order": 2
+      },
+      {
+        "title": "Functions & Closures",
+        "content": "\n      <h2>1. Higher-Order Functions</h2>\n      <p>Functions in JS are first-class citizens, meaning they can be assigned to variables, passed as arguments, and returned from other functions. A <strong>Higher-Order Function</strong> is a function that takes a function as an argument or returns one.</p>\n\n      <h2>2. Pure Functions</h2>\n      <p>A pure function always produces the same output for the same input and produces no side effects (e.g., modifying global state or DOM).</p>\n\n      <h2>3. Closures</h2>\n      <p>A <strong>Closure</strong> is a function that remembers its outer variables and can access them even after the outer function has finished executing. The inner function preserves the lexical scope of the outer function.</p>\n      <pre><code>\n// Closure for Data Privacy\nfunction createCounter() {\n  let count = 0; // Private variable\n  return function() {\n    count++;\n    return count;\n  }\n}\nconst counter = createCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2\n      </code></pre>\n    ",
+        "questions": [
+          {
+            "text": "What is a Higher-Order Function?",
+            "options": [
+              "A function that executes very fast",
+              "A function that takes another function as an argument or returns a function",
+              "A function that runs asynchronously",
+              "A function declared inside an object"
+            ],
+            "correctAnswer": "A function that takes another function as an argument or returns a function",
+            "difficulty": "Easy",
+            "explanation": "Because functions are first-class citizens in JS, they can be treated like any other variable, allowing higher-order functions."
+          },
+          {
+            "text": "What is a Closure?",
+            "options": [
+              "A function that is immediately invoked",
+              "A function bundled with its lexical environment",
+              "A function that has no side effects",
+              "A loop that terminates"
+            ],
+            "correctAnswer": "A function bundled with its lexical environment",
+            "difficulty": "Easy",
+            "explanation": "A closure allows an inner function to access an outer function's scope even after the outer function has returned."
+          },
+          {
+            "text": "What is the primary benefit of using closures in JavaScript?",
+            "options": [
+              "They make code execute faster",
+              "They allow for data privacy and encapsulation",
+              "They prevent the Event Loop from blocking",
+              "They act as a substitute for Promises"
+            ],
+            "correctAnswer": "They allow for data privacy and encapsulation",
+            "difficulty": "Medium",
+            "explanation": "Closures allow you to create private variables that cannot be accessed or modified directly from the outside."
+          },
+          {
+            "text": "Which of the following is an example of an IIFE (Immediately Invoked Function Expression)?",
+            "options": [
+              "function fn() { }()",
+              "(function() { })()",
+              "let fn = function() { }",
+              "setTimeout(() => {}, 0)"
+            ],
+            "correctAnswer": "(function() { })()",
+            "difficulty": "Medium",
+            "explanation": "An IIFE is defined inside parentheses to make it an expression, followed by () to invoke it immediately."
+          },
+          {
+            "text": "What is Function Currying?",
+            "options": [
+              "Binding `this` to a function",
+              "Translating a function with multiple arguments into a sequence of nested functions each taking a single argument",
+              "Executing a function recursively",
+              "Caching the results of a function"
+            ],
+            "correctAnswer": "Translating a function with multiple arguments into a sequence of nested functions each taking a single argument",
+            "difficulty": "Hard",
+            "explanation": "Currying transforms a function like f(a, b, c) into f(a)(b)(c)."
+          },
+          {
+            "text": "What is the output of this closure loop? `for (var i = 0; i < 3; i++) { setTimeout(() => console.log(i), 0); }`",
+            "options": [
+              "0, 1, 2",
+              "3, 3, 3",
+              "undefined, undefined, undefined",
+              "ReferenceError"
+            ],
+            "correctAnswer": "3, 3, 3",
+            "difficulty": "Hard",
+            "explanation": "Because `var` is function scoped, there is only one `i` binding. The loop finishes synchronously making `i = 3` before any of the asynchronous setTimeouts run."
+          }
+        ],
+        "order": 3
+      },
+      {
+        "title": "Objects",
+        "content": "\n      <h2>1. Object Creation & Properties</h2>\n      <p>Objects are collections of key-value pairs. Keys are strings (or Symbols). Values can be any data type. You can create objects using object literals <code>{}</code>, the <code>new Object()</code> syntax, or <code>Object.create()</code>.</p>\n      \n      <h2>2. Object Methods</h2>\n      <ul>\n        <li><code>Object.keys(obj)</code>: Returns an array of keys.</li>\n        <li><code>Object.values(obj)</code>: Returns an array of values.</li>\n        <li><code>Object.entries(obj)</code>: Returns an array of [key, value] pairs.</li>\n        <li><code>Object.assign(target, source)</code>: Copies properties from source to target.</li>\n      </ul>\n\n      <h2>3. Immutability</h2>\n      <p><code>Object.freeze()</code> makes an object entirely immutable. <code>Object.seal()</code> prevents adding or removing properties, but allows modifying existing ones.</p>\n      <pre><code>\nconst user = { name: \"Alice\", role: \"Admin\" };\nObject.freeze(user);\nuser.name = \"Bob\"; // Fails silently in non-strict mode\nconsole.log(user.name); // \"Alice\"\n      </code></pre>\n\n      <h2>4. Shallow vs Deep Copy</h2>\n      <p>The spread operator <code>{...obj}</code> creates a <strong>shallow copy</strong>. Nested objects are still referenced by memory address. To create a <strong>deep copy</strong>, you can use <code>JSON.parse(JSON.stringify(obj))</code> or the modern <code>structuredClone(obj)</code>.</p>\n    ",
+        "questions": [
+          {
+            "text": "What is the result of using the spread operator `{...obj}` on an object with nested objects?",
+            "options": [
+              "A complete deep clone is created",
+              "A shallow copy is created; nested objects share the same memory reference",
+              "A TypeError is thrown",
+              "The nested objects are converted to strings"
+            ],
+            "correctAnswer": "A shallow copy is created; nested objects share the same memory reference",
+            "difficulty": "Easy",
+            "explanation": "The spread operator only copies the first level of properties. Nested objects copy by reference."
+          },
+          {
+            "text": "Which method returns an array of a given object's own enumerable string-keyed property [key, value] pairs?",
+            "options": [
+              "Object.keys()",
+              "Object.values()",
+              "Object.entries()",
+              "Object.assign()"
+            ],
+            "correctAnswer": "Object.entries()",
+            "difficulty": "Easy",
+            "explanation": "Object.entries() returns an array containing arrays of the [key, value] pairs."
+          },
+          {
+            "text": "What is the difference between Object.freeze() and Object.seal()?",
+            "options": [
+              "freeze allows modifying existing properties, seal does not",
+              "seal allows modifying existing properties, freeze does not",
+              "They are exactly the same",
+              "freeze is for arrays, seal is for objects"
+            ],
+            "correctAnswer": "seal allows modifying existing properties, freeze does not",
+            "difficulty": "Medium",
+            "explanation": "Object.seal() prevents adding/removing properties but allows changing existing ones. freeze() makes the object completely immutable."
+          },
+          {
+            "text": "How does the modern `structuredClone()` function improve upon `JSON.parse(JSON.stringify())`?",
+            "options": [
+              "It is synchronous",
+              "It works in older browsers natively",
+              "It can clone Maps, Sets, Dates, and handle circular references",
+              "It minifies the object data"
+            ],
+            "correctAnswer": "It can clone Maps, Sets, Dates, and handle circular references",
+            "difficulty": "Medium",
+            "explanation": "structuredClone is the modern native way to deep clone objects and supports complex types that JSON stringification breaks on."
+          },
+          {
+            "text": "What happens when you try to reassign a property of an Object.freeze() object in Strict Mode?",
+            "options": [
+              "It fails silently",
+              "It throws a TypeError",
+              "It successfully changes the property",
+              "It deletes the property instead"
+            ],
+            "correctAnswer": "It throws a TypeError",
+            "difficulty": "Hard",
+            "explanation": "In non-strict mode it fails silently, but in strict mode, mutating a frozen object throws a TypeError."
+          },
+          {
+            "text": "If obj = { a: 1 }, what does Object.defineProperty(obj, 'b', { value: 2 }) do if 'enumerable' is not specified?",
+            "options": [
+              "Creates 'b', which shows up in Object.keys()",
+              "Creates 'b', but it does NOT show up in Object.keys()",
+              "Throws an error",
+              "Modifies property 'a'"
+            ],
+            "correctAnswer": "Creates 'b', but it does NOT show up in Object.keys()",
+            "difficulty": "Hard",
+            "explanation": "By default, properties added via Object.defineProperty are not enumerable, not configurable, and not writable unless explicitly set to true."
+          }
+        ],
+        "order": 4
+      },
+      {
+        "title": "Prototypes & Inheritance",
+        "content": "\n      <h2>1. The Prototype Chain</h2>\n      <p>Every object in JavaScript has a built-in property called its <strong>prototype</strong>. The prototype is itself an object, so the prototype will have its own prototype, making a <strong>prototype chain</strong>. The chain ends when it reaches a prototype that has <code>null</code> for its own prototype.</p>\n\n      <h2>2. __proto__ vs prototype</h2>\n      <p><code>__proto__</code> is the actual object that is used in the lookup chain to resolve methods, etc. <code>prototype</code> is the object that is used to build <code>__proto__</code> when you create an object with <code>new</code>.</p>\n\n      <h2>3. ES6 Classes</h2>\n      <p>Classes in JS are syntactic sugar over the existing prototype-based inheritance. They provide a cleaner syntax to create objects and deal with inheritance.</p>\n      <pre><code>\nclass Animal {\n  constructor(name) {\n    this.name = name;\n  }\n  speak() {\n    console.log(this.name + ' makes a noise.');\n  }\n}\n\nclass Dog extends Animal {\n  constructor(name) {\n    super(name); // Call the parent constructor\n  }\n  speak() {\n    console.log(this.name + ' barks.');\n  }\n}\n      </code></pre>\n    ",
+        "questions": [
+          {
+            "text": "What keyword is used to inherit from a parent class in ES6?",
+            "options": [
+              "inherits",
+              "extends",
+              "super",
+              "implement"
+            ],
+            "correctAnswer": "extends",
+            "difficulty": "Easy",
+            "explanation": "The 'extends' keyword is used in class declarations or class expressions to create a class that is a child of another class."
+          },
+          {
+            "text": "What is the top-most prototype in the JavaScript prototype chain?",
+            "options": [
+              "Function.prototype",
+              "Array.prototype",
+              "Object.prototype",
+              "null"
+            ],
+            "correctAnswer": "Object.prototype",
+            "difficulty": "Easy",
+            "explanation": "Nearly all objects in JavaScript are instances of Object; a typical object inherits properties from Object.prototype."
+          },
+          {
+            "text": "What does the `super()` function do in a child class constructor?",
+            "options": [
+              "References the global object",
+              "Throws an error",
+              "Calls the parent class's constructor",
+              "Returns the current instance"
+            ],
+            "correctAnswer": "Calls the parent class's constructor",
+            "difficulty": "Medium",
+            "explanation": "In a derived class with a constructor, you must call super() before you can use 'this'."
+          },
+          {
+            "text": "How can you programmatically get the prototype of a specific object instance?",
+            "options": [
+              "object.prototype",
+              "Object.getPrototypeOf(object)",
+              "object.parent",
+              "object.__parent__"
+            ],
+            "correctAnswer": "Object.getPrototypeOf(object)",
+            "difficulty": "Medium",
+            "explanation": "Object.getPrototypeOf() is the standard method to get the prototype of an object, rather than using the deprecated __proto__ property."
+          },
+          {
+            "text": "What is the difference between an object's `__proto__` and a function's `prototype` property?",
+            "options": [
+              "They are identical",
+              "__proto__ is the actual prototype chain link for an instance; prototype is the object attached to instances created via 'new' on that function",
+              "prototype is for arrays, __proto__ is for objects",
+              "__proto__ is a method, prototype is a string"
+            ],
+            "correctAnswer": "__proto__ is the actual prototype chain link for an instance; prototype is the object attached to instances created via 'new' on that function",
+            "difficulty": "Hard",
+            "explanation": "The 'prototype' property on a constructor function is what it *assigns* to the __proto__ of instances it creates."
+          },
+          {
+            "text": "What happens if you define a method inside an ES6 class without the `static` keyword?",
+            "options": [
+              "It is attached to the class itself, not instances",
+              "It is attached to the instance's prototype",
+              "It throws a Syntax Error",
+              "It is attached directly to the instance object"
+            ],
+            "correctAnswer": "It is attached to the instance's prototype",
+            "difficulty": "Hard",
+            "explanation": "Standard methods in a class body are placed on the class's prototype, so all instances share the same function reference."
+          }
+        ],
+        "order": 5
+      },
+      {
+        "title": "`this` Keyword",
+        "content": "\n      <h2>1. Execution Context Binding</h2>\n      <p>The value of <code>this</code> is evaluated at runtime depending on the function's execution context. It behaves differently in strict mode vs non-strict mode.</p>\n\n      <h2>2. The 4 Rules of 'this' Binding</h2>\n      <ul>\n        <li><strong>Implicit Binding:</strong> When a function is called as a method of an object (e.g., <code>obj.method()</code>), <code>this</code> points to the object.</li>\n        <li><strong>Explicit Binding:</strong> Using <code>.call()</code>, <code>.apply()</code>, or <code>.bind()</code> to explicitly state what <code>this</code> should be.</li>\n        <li><strong>New Binding:</strong> When a function is called with the <code>new</code> keyword, <code>this</code> points to the newly created instance.</li>\n        <li><strong>Default Binding:</strong> A standalone function invocation defaults <code>this</code> to the global object (window) or <code>undefined</code> in strict mode.</li>\n      </ul>\n\n      <h2>3. Arrow Functions</h2>\n      <p>Arrow functions do not have their own <code>this</code> context. They inherit <code>this</code> lexically from the parent scope at the time they are defined.</p>\n      <pre><code>\nconst user = {\n  name: \"Alice\",\n  regularFunc: function() { console.log(this.name); },\n  arrowFunc: () => { console.log(this.name); }\n};\nuser.regularFunc(); // \"Alice\"\nuser.arrowFunc(); // undefined (inherits from window)\n      </code></pre>\n    ",
+        "questions": [
+          {
+            "text": "What does `this` refer to in a standard standalone function call in non-strict mode?",
+            "options": [
+              "undefined",
+              "null",
+              "The Global Object (e.g., window in browsers)",
+              "An empty object"
+            ],
+            "correctAnswer": "The Global Object (e.g., window in browsers)",
+            "difficulty": "Easy",
+            "explanation": "Default binding points 'this' to the global object when not in strict mode."
+          },
+          {
+            "text": "How do Arrow Functions handle the `this` keyword?",
+            "options": [
+              "They bind it to the object calling them",
+              "They bind it to the global object always",
+              "They lexically bind it to the enclosing scope",
+              "They throw an error if this is used"
+            ],
+            "correctAnswer": "They lexically bind it to the enclosing scope",
+            "difficulty": "Easy",
+            "explanation": "Arrow functions do not bind their own 'this'. They inherit it from the parent scope."
+          },
+          {
+            "text": "What is the difference between `.call()` and `.apply()`?",
+            "options": [
+              ".call takes arguments as an array; .apply takes arguments separated by commas",
+              ".apply takes arguments as an array; .call takes arguments separated by commas",
+              "There is no difference",
+              ".call returns a new function; .apply executes it immediately"
+            ],
+            "correctAnswer": ".apply takes arguments as an array; .call takes arguments separated by commas",
+            "difficulty": "Medium",
+            "explanation": "Both invoke the function immediately and explicitly set 'this', but apply expects an array of arguments (A for Array)."
+          },
+          {
+            "text": "What does `.bind()` return?",
+            "options": [
+              "The result of the function execution",
+              "undefined",
+              "A new function with the `this` context permanently bound",
+              "An array"
+            ],
+            "correctAnswer": "A new function with the `this` context permanently bound",
+            "difficulty": "Medium",
+            "explanation": ".bind() does not execute the function immediately; it returns a new bound instance of the function."
+          },
+          {
+            "text": "What happens if you use the `new` keyword on an arrow function?",
+            "options": [
+              "It creates a new object successfully",
+              "It throws a TypeError because arrow functions are not constructors",
+              "It returns undefined",
+              "It creates a global variable"
+            ],
+            "correctAnswer": "It throws a TypeError because arrow functions are not constructors",
+            "difficulty": "Hard",
+            "explanation": "Arrow functions do not have a [[Construct]] method and cannot be used with 'new'."
+          },
+          {
+            "text": "If `const bound = fn.bind(obj1);`, what happens if you call `bound.call(obj2)`?",
+            "options": [
+              "'this' becomes obj2",
+              "'this' remains obj1",
+              "It throws an error",
+              "'this' becomes the global object"
+            ],
+            "correctAnswer": "'this' remains obj1",
+            "difficulty": "Hard",
+            "explanation": "Once a function is bound using .bind(), its 'this' context cannot be changed again, even with .call() or .apply()."
+          }
+        ],
+        "order": 6
+      },
+      {
+        "title": "Arrays",
+        "content": "\n      <h2>1. Array Methods Overview</h2>\n      <p>JavaScript provides numerous built-in methods for array manipulation. Understanding which methods mutate the original array versus returning a new array is critical for React and Functional Programming.</p>\n      \n      <h2>2. Mutating Methods</h2>\n      <ul>\n        <li><code>push()</code> / <code>pop()</code>: Add/remove from end.</li>\n        <li><code>shift()</code> / <code>unshift()</code>: Add/remove from beginning.</li>\n        <li><code>splice(start, deleteCount, item1...)</code>: Modifies array in place.</li>\n        <li><code>sort()</code> / <code>reverse()</code>: Mutates original array in place.</li>\n      </ul>\n\n      <h2>3. Non-Mutating (Immutable) Methods</h2>\n      <ul>\n        <li><code>map()</code>: Returns a new array with transformed elements.</li>\n        <li><code>filter()</code>: Returns a new array with elements that pass a test.</li>\n        <li><code>reduce()</code>: Reduces the array to a single value.</li>\n        <li><code>slice(start, end)</code>: Returns a shallow copy of a portion of an array.</li>\n      </ul>\n      <pre><code>\nconst nums = [1, 2, 3];\nconst doubled = nums.map(n => n * 2); // [2, 4, 6]\nconsole.log(nums); // [1, 2, 3] (original unchanged)\n      </code></pre>\n    ",
+        "questions": [
+          {
+            "text": "Which array method modifies the original array?",
+            "options": [
+              "slice()",
+              "map()",
+              "filter()",
+              "splice()"
+            ],
+            "correctAnswer": "splice()",
+            "difficulty": "Easy",
+            "explanation": "splice() adds/removes items to/from an array, changing the original array."
+          },
+          {
+            "text": "What does the `.map()` method return?",
+            "options": [
+              "A single value",
+              "undefined",
+              "A completely new array with the results of calling a provided function on every element",
+              "The original array, modified"
+            ],
+            "correctAnswer": "A completely new array with the results of calling a provided function on every element",
+            "difficulty": "Easy",
+            "explanation": "map() is an immutable method that transforms every element and returns a new array."
+          },
+          {
+            "text": "What is the difference between `slice()` and `splice()`?",
+            "options": [
+              "They are identical",
+              "slice mutates the array; splice returns a copy",
+              "splice mutates the array; slice returns a copy",
+              "Neither mutates the array"
+            ],
+            "correctAnswer": "splice mutates the array; slice returns a copy",
+            "difficulty": "Medium",
+            "explanation": "slice(start, end) returns a portion of the array without modifying it. splice() modifies the array in place."
+          },
+          {
+            "text": "How does the `.reduce()` method work?",
+            "options": [
+              "It removes elements from an array",
+              "It executes a reducer function on each element, resulting in a single output value",
+              "It returns an array of booleans",
+              "It flattens a multi-dimensional array"
+            ],
+            "correctAnswer": "It executes a reducer function on each element, resulting in a single output value",
+            "difficulty": "Medium",
+            "explanation": "reduce() takes an accumulator and the current value, and iterates through the array to produce a single final value."
+          },
+          {
+            "text": "By default, how does the `sort()` method sort elements?",
+            "options": [
+              "Numerically in ascending order",
+              "Numerically in descending order",
+              "It converts elements to strings and compares their UTF-16 code unit values sequences",
+              "Randomly"
+            ],
+            "correctAnswer": "It converts elements to strings and compares their UTF-16 code unit values sequences",
+            "difficulty": "Hard",
+            "explanation": "Without a compare function, sort() converts elements to strings. This means [1, 10, 2] sorts to [1, 10, 2] instead of [1, 2, 10]."
+          },
+          {
+            "text": "What is an 'Array-Like Object' and how can you convert it to a real Array?",
+            "options": [
+              "An object with a .length property; use Array.from()",
+              "A string; use Object.values()",
+              "An object with numeric keys; use JSON.parse()",
+              "A Set; use .flat()"
+            ],
+            "correctAnswer": "An object with a .length property; use Array.from()",
+            "difficulty": "Hard",
+            "explanation": "Objects like the `arguments` object or DOM NodeLists have numeric indices and a length property, but lack array methods. Array.from() converts them to real arrays."
+          }
+        ],
+        "order": 7
+      },
+      {
+        "title": "Strings & Regex",
+        "content": "\n      <h2>1. String Methods</h2>\n      <p>Strings are immutable primitives. Important methods include <code>split()</code>, <code>slice()</code>, <code>substring()</code>, <code>replace()</code>, <code>trim()</code>, and <code>includes()</code>.</p>\n      \n      <h2>2. Template Literals</h2>\n      <p>Introduced in ES6, they use backticks and allow multi-line strings and interpolation using <code>${expression}</code>.</p>\n      <pre><code>\nconst name = \"World\";\nconsole.log(`Hello, ${name}!`);\n      </code></pre>\n\n      <h2>3. Regular Expressions (Regex)</h2>\n      <p>Used for pattern matching. Flags include <code>g</code> (global), <code>i</code> (case-insensitive), and <code>m</code> (multiline).</p>\n      <ul>\n        <li><code>^</code> matches the beginning of input.</li>\n        <li><code>$</code> matches the end of input.</li>\n        <li><code>+</code> matches 1 or more times.</li>\n        <li><code>*</code> matches 0 or more times.</li>\n      </ul>\n    ",
+        "questions": [
+          {
+            "text": "Which string method extracts a section of a string and returns it as a new string, without modifying the original string?",
+            "options": [
+              "splice()",
+              "slice()",
+              "split()",
+              "trim()"
+            ],
+            "correctAnswer": "slice()",
+            "difficulty": "Easy",
+            "explanation": "slice(start, end) extracts a portion of a string. splice() is an array method, not a string method."
+          },
+          {
+            "text": "What syntax is used for string interpolation in ES6 template literals?",
+            "options": [
+              "#{expression}",
+              "${expression}",
+              "<%= expression %>",
+              "{{expression}}"
+            ],
+            "correctAnswer": "${expression}",
+            "difficulty": "Easy",
+            "explanation": "Template literals use backticks and ${} to embed expressions."
+          },
+          {
+            "text": "What is the difference between `substring()` and `substr()`?",
+            "options": [
+              "They are identical",
+              "substring takes a start and end index; substr takes a start index and a length",
+              "substr takes a start and end index; substring takes a start index and a length",
+              "substr is an array method"
+            ],
+            "correctAnswer": "substring takes a start and end index; substr takes a start index and a length",
+            "difficulty": "Medium",
+            "explanation": "Note: substr() is considered legacy and its use should be avoided in modern code."
+          },
+          {
+            "text": "What does the regular expression flag 'i' do?",
+            "options": [
+              "Global search",
+              "Case-insensitive search",
+              "Multiline search",
+              "Stops at the first match"
+            ],
+            "correctAnswer": "Case-insensitive search",
+            "difficulty": "Medium",
+            "explanation": "The 'i' flag ignores case when matching letters."
+          },
+          {
+            "text": "In regular expressions, what does a Lookahead `(?=...)` do?",
+            "options": [
+              "Asserts that what immediately follows the current position in the string matches the pattern, without consuming characters",
+              "Searches the string backwards",
+              "Replaces the pattern with the specified string",
+              "Matches any single character"
+            ],
+            "correctAnswer": "Asserts that what immediately follows the current position in the string matches the pattern, without consuming characters",
+            "difficulty": "Hard",
+            "explanation": "Lookaheads are zero-width assertions. They check if a pattern exists ahead without moving the regex pointer."
+          },
+          {
+            "text": "What is the output of `\"hello\".replace(/l/g, \"1\")`?",
+            "options": [
+              "he1lo",
+              "he11o",
+              "hello",
+              "11111"
+            ],
+            "correctAnswer": "he11o",
+            "difficulty": "Hard",
+            "explanation": "The 'g' flag ensures that all occurrences of 'l' are replaced with '1'."
+          }
+        ],
+        "order": 8
+      },
+      {
+        "title": "Modern ES6+",
+        "content": "\n      <h2>1. Destructuring & Spread/Rest</h2>\n      <p>Destructuring allows you to unpack values from arrays or properties from objects into distinct variables. The Rest operator (<code>...args</code>) collects multiple elements into a single array. The Spread operator expands iterables into individual elements.</p>\n\n      <h2>2. Optional Chaining (?.) & Nullish Coalescing (??)</h2>\n      <p>Optional chaining allows reading the value of a property located deep within a chain without throwing an error if a reference is nullish.</p>\n      <p>Nullish Coalescing returns its right-hand side operand when its left-hand side is exactly <code>null</code> or <code>undefined</code>.</p>\n      <pre><code>\nconst user = { profile: { name: \"Alice\" } };\nconsole.log(user?.profile?.age ?? 25); // 25\n      </code></pre>\n\n      <h2>3. Collections (Map, Set)</h2>\n      <p><code>Map</code> holds key-value pairs and remembers insertion order. Any value can be used as either a key or a value. <code>Set</code> lets you store unique values of any type.</p>\n    ",
+        "questions": [
+          {
+            "text": "What does the Spread operator (`...`) do when used on an array?",
+            "options": [
+              "It condenses the array into a single string",
+              "It expands the array elements into individual arguments/elements",
+              "It reverses the array",
+              "It creates a multi-dimensional array"
+            ],
+            "correctAnswer": "It expands the array elements into individual arguments/elements",
+            "difficulty": "Easy",
+            "explanation": "Spread 'unpacks' an iterable. E.g., Math.max(...[1, 2, 3]) becomes Math.max(1, 2, 3)."
+          },
+          {
+            "text": "Which modern feature safely accesses deeply nested object properties without throwing a TypeError?",
+            "options": [
+              "Nullish Coalescing",
+              "Optional Chaining",
+              "Ternary Operator",
+              "Spread Operator"
+            ],
+            "correctAnswer": "Optional Chaining",
+            "difficulty": "Easy",
+            "explanation": "Optional Chaining (?.) short-circuits and returns undefined if the property before it is null or undefined."
+          },
+          {
+            "text": "How is a Map different from a standard Object?",
+            "options": [
+              "Maps can only have string keys",
+              "Maps do not remember insertion order",
+              "Maps allow keys of any data type (including objects and functions)",
+              "Maps are strictly immutable"
+            ],
+            "correctAnswer": "Maps allow keys of any data type (including objects and functions)",
+            "difficulty": "Medium",
+            "explanation": "Unlike regular objects which convert keys to strings/symbols, Maps can use objects, functions, or any primitive as a key."
+          },
+          {
+            "text": "What happens when you add a duplicate value to a `Set`?",
+            "options": [
+              "It throws an error",
+              "It overwrites the entire Set",
+              "It creates an array of that value",
+              "It simply ignores the duplicate"
+            ],
+            "correctAnswer": "It simply ignores the duplicate",
+            "difficulty": "Medium",
+            "explanation": "A Set is a collection of unique values. Adding a duplicate has no effect."
+          },
+          {
+            "text": "What is the difference between `||` (Logical OR) and `??` (Nullish Coalescing)?",
+            "options": [
+              "They are identical",
+              "`||` returns the right side if the left is falsey (e.g., 0, ''); `??` only returns the right side if the left is strictly null or undefined",
+              "`??` returns the right side if the left is falsey; `||` checks for null/undefined",
+              "`??` is used for math operations"
+            ],
+            "correctAnswer": "`||` returns the right side if the left is falsey (e.g., 0, ''); `??` only returns the right side if the left is strictly null or undefined",
+            "difficulty": "Hard",
+            "explanation": "This is crucial when 0 or '' are valid values that shouldn't be overwritten by defaults."
+          },
+          {
+            "text": "What does the Rest operator do in function parameters? E.g., `function foo(a, ...b) {}`",
+            "options": [
+              "It creates a copy of the arguments object",
+              "It collects all remaining arguments into an array",
+              "It expands an array into individual arguments",
+              "It stops the function execution"
+            ],
+            "correctAnswer": "It collects all remaining arguments into an array",
+            "difficulty": "Hard",
+            "explanation": "In function definitions, ...b gathers the rest of the comma-separated arguments into a standard array named b."
+          }
+        ],
+        "order": 9
+      },
+      {
+        "title": "Asynchronous JavaScript",
+        "content": "\n      <h2>1. The Event Loop</h2>\n      <p>JS is single-threaded. It handles concurrency using the Event Loop. Synchronous code executes first on the Call Stack. Asynchronous callbacks are sent to the Web APIs, then to Queues.</p>\n      <ul>\n        <li><strong>Microtask Queue:</strong> Promises (<code>.then</code>, <code>catch</code>, <code>finally</code>), <code>queueMicrotask</code>, <code>MutationObserver</code>.</li>\n        <li><strong>Macrotask Queue:</strong> <code>setTimeout</code>, <code>setInterval</code>, DOM events, fetch callbacks.</li>\n      </ul>\n      <p><em>The Event Loop empties the entire Microtask queue before running a single Macrotask.</em></p>\n\n      <h2>2. Promises</h2>\n      <p>A Promise represents the eventual completion (or failure) of an asynchronous operation. It has three states: Pending, Fulfilled, or Rejected.</p>\n      <pre><code>\nPromise.resolve(1)\n  .then(res => res * 2)\n  .then(res => console.log(res)); // 2\n      </code></pre>\n\n      <h2>3. Async / Await</h2>\n      <p>Syntactic sugar over Promises. An <code>async</code> function always returns a Promise. The <code>await</code> keyword pauses the execution of the async function until the Promise settles.</p>\n    ",
+        "questions": [
+          {
+            "text": "What are the three possible states of a Promise?",
+            "options": [
+              "Running, Paused, Stopped",
+              "Pending, Fulfilled, Rejected",
+              "Waiting, Resolving, Catching",
+              "Sync, Async, Await"
+            ],
+            "correctAnswer": "Pending, Fulfilled, Rejected",
+            "difficulty": "Easy",
+            "explanation": "A Promise starts as Pending, and then settles into either a Fulfilled (success) or Rejected (failure) state."
+          },
+          {
+            "text": "What keyword is used to pause the execution of an async function until a Promise settles?",
+            "options": [
+              "pause",
+              "wait",
+              "yield",
+              "await"
+            ],
+            "correctAnswer": "await",
+            "difficulty": "Easy",
+            "explanation": "The await keyword blocks the execution of code within the async function until the awaited Promise is resolved or rejected."
+          },
+          {
+            "text": "Which queue has a higher priority in the Event Loop?",
+            "options": [
+              "Macrotask Queue",
+              "Microtask Queue",
+              "Callback Queue",
+              "They have equal priority"
+            ],
+            "correctAnswer": "Microtask Queue",
+            "difficulty": "Medium",
+            "explanation": "After the Call Stack is empty, the Event Loop will process all tasks in the Microtask Queue before moving on to the Macrotask Queue."
+          },
+          {
+            "text": "What happens if a Promise in `Promise.all()` rejects?",
+            "options": [
+              "It waits for the others to finish and returns an array of successes",
+              "The entire Promise.all rejects immediately with that error",
+              "It throws a syntax error",
+              "It ignores the error and continues"
+            ],
+            "correctAnswer": "The entire Promise.all rejects immediately with that error",
+            "difficulty": "Medium",
+            "explanation": "Promise.all() has fail-fast behavior. If one rejects, the whole thing rejects immediately. Use Promise.allSettled() if you want to wait for all regardless of failure."
+          },
+          {
+            "text": "What does `Promise.race()` do?",
+            "options": [
+              "Returns the first Promise to fulfill, ignoring rejections",
+              "Returns the first Promise to settle (either fulfill or reject)",
+              "Runs Promises sequentially",
+              "Slows down Promise execution for debugging"
+            ],
+            "correctAnswer": "Returns the first Promise to settle (either fulfill or reject)",
+            "difficulty": "Hard",
+            "explanation": "Promise.race() resolves or rejects as soon as the *first* promise in the iterable resolves or rejects."
+          },
+          {
+            "text": "What is the output? `setTimeout(()=>console.log('A'),0); Promise.resolve().then(()=>console.log('B')); console.log('C');`",
+            "options": [
+              "A, B, C",
+              "C, A, B",
+              "C, B, A",
+              "B, C, A"
+            ],
+            "correctAnswer": "C, B, A",
+            "difficulty": "Hard",
+            "explanation": "'C' is sync (Call Stack). 'B' is a microtask (Promise). 'A' is a macrotask (setTimeout). Order is Stack -> Micro -> Macro."
+          }
+        ],
+        "order": 10
+      },
+      {
+        "title": "DOM & Browser APIs",
+        "content": "\n      <h2>1. The DOM (Document Object Model)</h2>\n      <p>The DOM is an object-oriented representation of the web page. We use JS to select elements (<code>querySelector</code>) and modify them.</p>\n      \n      <h2>2. Event Propagation</h2>\n      <p>When an event occurs, it travels through the DOM tree in three phases:</p>\n      <ol>\n        <li><strong>Capturing Phase:</strong> Travels down from the window to the target.</li>\n        <li><strong>Target Phase:</strong> Reaches the target element.</li>\n        <li><strong>Bubbling Phase:</strong> Bubbles up from the target back to the window.</li>\n      </ol>\n      <p><strong>Event Delegation</strong> is the pattern of attaching a single event listener to a parent element to catch bubbling events from its children.</p>\n\n      <h2>3. Web Storage</h2>\n      <p><code>localStorage</code> (persists until deleted, ~5MB) vs <code>sessionStorage</code> (cleared when tab closes).</p>\n    ",
+        "questions": [
+          {
+            "text": "What is the difference between event bubbling and event capturing?",
+            "options": [
+              "Bubbling goes from target to root, capturing goes from root to target",
+              "Capturing goes from target to root, bubbling goes from root to target",
+              "They are the same thing",
+              "Capturing stops the event, bubbling does not"
+            ],
+            "correctAnswer": "Bubbling goes from target to root, capturing goes from root to target",
+            "difficulty": "Easy",
+            "explanation": "Event bubbling propagates upwards. Capturing propagates downwards."
+          },
+          {
+            "text": "Which method prevents an event from propagating further in the capturing and bubbling phases?",
+            "options": [
+              "event.preventDefault()",
+              "event.stopPropagation()",
+              "event.cancel()",
+              "event.stopImmediatePropagation()"
+            ],
+            "correctAnswer": "event.stopPropagation()",
+            "difficulty": "Easy",
+            "explanation": "stopPropagation() stops the event from moving up or down the DOM tree."
+          },
+          {
+            "text": "What is the storage capacity limit for LocalStorage in most modern browsers?",
+            "options": [
+              "~5MB",
+              "~50MB",
+              "Unlimited",
+              "4KB"
+            ],
+            "correctAnswer": "~5MB",
+            "difficulty": "Medium",
+            "explanation": "LocalStorage is limited to about 5MB per origin."
+          },
+          {
+            "text": "What does `event.preventDefault()` do?",
+            "options": [
+              "Stops event bubbling",
+              "Prevents the default browser action for that event",
+              "Removes the event listener",
+              "Refreshes the page"
+            ],
+            "correctAnswer": "Prevents the default browser action for that event",
+            "difficulty": "Medium",
+            "explanation": "It stops things like form submissions from reloading the page or links from navigating."
+          },
+          {
+            "text": "What is Event Delegation?",
+            "options": [
+              "Passing events to a Web Worker",
+              "Attaching a single event listener to a parent element to handle events from multiple dynamic children",
+              "Preventing the default action",
+              "Stopping event propagation entirely"
+            ],
+            "correctAnswer": "Attaching a single event listener to a parent element to handle events from multiple dynamic children",
+            "difficulty": "Hard",
+            "explanation": "Event delegation leverages event bubbling to handle events efficiently at a higher level, which is great for dynamically added elements."
+          },
+          {
+            "text": "How can you attach an event listener that triggers during the Capturing phase rather than the Bubbling phase?",
+            "options": [
+              "element.addEventListener('click', fn, true)",
+              "element.addEventListener('click', fn, false)",
+              "element.oncapture = fn",
+              "It's not possible in modern browsers"
+            ],
+            "correctAnswer": "element.addEventListener('click', fn, true)",
+            "difficulty": "Hard",
+            "explanation": "Passing `true` as the third argument to addEventListener (the `useCapture` flag) sets the listener to trigger during the capturing phase."
+          }
+        ],
+        "order": 11
+      },
+      {
+        "title": "Modules & Memory Management",
+        "content": "\n      <h2>1. JavaScript Modules</h2>\n      <p>Modules allow splitting code into separate files. <strong>ES Modules (ESM)</strong> use <code>import / export</code>. <strong>CommonJS (CJS)</strong> uses <code>require() / module.exports</code> (common in older Node.js).</p>\n      \n      <h2>2. Memory & Garbage Collection</h2>\n      <p>Memory is allocated in the <strong>Stack</strong> (static data, primitives) and the <strong>Heap</strong> (objects, arrays). JS automatically clears unused memory using a Garbage Collector.</p>\n      <p>The most common GC algorithm is <strong>Mark-and-Sweep</strong>. It starts at the roots (global object) and marks all reachable objects. Unreachable objects are swept away.</p>\n\n      <h2>3. Memory Leaks</h2>\n      <p>Common causes of memory leaks include accidental global variables, uncleared intervals/timers, and unremoved event listeners holding references to DOM elements.</p>\n    ",
+        "questions": [
+          {
+            "text": "Which syntax is used for importing a module in standard ES Modules (ES6)?",
+            "options": [
+              "require('module')",
+              "import { x } from 'module'",
+              "include 'module'",
+              "fetch('module')"
+            ],
+            "correctAnswer": "import { x } from 'module'",
+            "difficulty": "Easy",
+            "explanation": "ES Modules use the import and export keywords."
+          },
+          {
+            "text": "Where are primitive values and execution contexts stored in memory?",
+            "options": [
+              "The Heap",
+              "The Stack",
+              "The Event Loop",
+              "The Web APIs"
+            ],
+            "correctAnswer": "The Stack",
+            "difficulty": "Easy",
+            "explanation": "The Stack handles static memory allocation (primitives and function calls), while the Heap handles dynamic memory (objects)."
+          },
+          {
+            "text": "What is the primary Garbage Collection algorithm used by modern JavaScript engines?",
+            "options": [
+              "Reference Counting",
+              "Mark-and-Sweep",
+              "Manual Allocation",
+              "First-In-First-Out"
+            ],
+            "correctAnswer": "Mark-and-Sweep",
+            "difficulty": "Medium",
+            "explanation": "Mark-and-Sweep finds all reachable objects starting from the global root. Anything unreachable is collected."
+          },
+          {
+            "text": "Which keyword is used in ES Modules to export a single, fallback value from a module?",
+            "options": [
+              "export default",
+              "module.exports",
+              "export single",
+              "export all"
+            ],
+            "correctAnswer": "export default",
+            "difficulty": "Medium",
+            "explanation": "export default allows you to export exactly one default value from a file."
+          },
+          {
+            "text": "What is a common cause of a memory leak in a Single Page Application (SPA)?",
+            "options": [
+              "Using `let` instead of `var`",
+              "Failing to call `removeEventListener` when a component unmounts",
+              "Using too many Arrow Functions",
+              "Using the Fetch API"
+            ],
+            "correctAnswer": "Failing to call `removeEventListener` when a component unmounts",
+            "difficulty": "Hard",
+            "explanation": "If an event listener references a DOM element or component state and is never removed, it prevents the Garbage Collector from freeing that memory even after the component is gone."
+          },
+          {
+            "text": "Why might you use a `WeakMap` instead of a standard `Map`?",
+            "options": [
+              "WeakMap allows garbage collection of its keys if there are no other references to them",
+              "WeakMap is faster for iterating",
+              "WeakMap supports primitive keys",
+              "WeakMap is synchronous"
+            ],
+            "correctAnswer": "WeakMap allows garbage collection of its keys if there are no other references to them",
+            "difficulty": "Hard",
+            "explanation": "WeakMaps hold 'weak' references to object keys. If the object key is deleted elsewhere, it gets garbage collected from the WeakMap too, preventing memory leaks."
+          }
+        ],
+        "order": 12
+      },
+      {
+        "title": "Functional Programming & Error Handling",
+        "content": "\n      <h2>1. Functional Programming Concepts</h2>\n      <p><strong>Pure Functions:</strong> No side effects, same input = same output.</p>\n      <p><strong>Immutability:</strong> Data should not be changed after creation. Instead, create new copies.</p>\n      <p><strong>Currying:</strong> Transforming a function with multiple arguments into a sequence of functions, each taking a single argument.</p>\n\n      <h2>2. Error Handling</h2>\n      <p>Errors are handled using <code>try...catch...finally</code> blocks. You can create custom errors by extending the <code>Error</code> class.</p>\n      <pre><code>\ntry {\n  throw new Error(\"Something broke!\");\n} catch (error) {\n  console.log(error.message);\n} finally {\n  console.log(\"Runs no matter what.\");\n}\n      </code></pre>\n    ",
+        "questions": [
+          {
+            "text": "What is a Pure Function?",
+            "options": [
+              "A function that returns undefined",
+              "A function with no side effects that always returns the same output for the same input",
+              "A function that uses var",
+              "An anonymous function"
+            ],
+            "correctAnswer": "A function with no side effects that always returns the same output for the same input",
+            "difficulty": "Easy",
+            "explanation": "Pure functions do not mutate external state and are highly predictable."
+          },
+          {
+            "text": "What happens in a `finally` block?",
+            "options": [
+              "It only runs if an error occurs",
+              "It only runs if no error occurs",
+              "It executes regardless of whether an exception is thrown or caught",
+              "It catches asynchronous errors"
+            ],
+            "correctAnswer": "It executes regardless of whether an exception is thrown or caught",
+            "difficulty": "Easy",
+            "explanation": "The finally block is used for cleanup code and runs unconditionally after try and catch."
+          },
+          {
+            "text": "What is Currying in JavaScript?",
+            "options": [
+              "Evaluating a function with multiple arguments as a sequence of functions, each taking a single argument",
+              "Binding 'this' to a function permanently",
+              "Creating an infinite loop",
+              "A performance optimization technique"
+            ],
+            "correctAnswer": "Evaluating a function with multiple arguments as a sequence of functions, each taking a single argument",
+            "difficulty": "Medium",
+            "explanation": "Currying transforms a function f(a, b, c) into f(a)(b)(c)."
+          },
+          {
+            "text": "Does a `finally` block execute if a `return` statement is inside the `try` block?",
+            "options": [
+              "Yes, always",
+              "No, it skips finally",
+              "Only if an error is thrown",
+              "It causes a syntax error"
+            ],
+            "correctAnswer": "Yes, always",
+            "difficulty": "Medium",
+            "explanation": "The finally block executes even if a return statement is encountered in the try or catch blocks."
+          },
+          {
+            "text": "In Functional Programming, what is 'Referential Transparency'?",
+            "options": [
+              "The ability to access private variables",
+              "An expression that can be replaced with its corresponding value without changing the program's behavior",
+              "When functions return functions",
+              "When a variable is hoisted"
+            ],
+            "correctAnswer": "An expression that can be replaced with its corresponding value without changing the program's behavior",
+            "difficulty": "Hard",
+            "explanation": "Referential transparency implies that a function is pure and evaluating it gives the same value for the same arguments every time."
+          },
+          {
+            "text": "How do you correctly handle an error inside an asynchronous `setTimeout` callback using `try...catch`?",
+            "options": [
+              "Wrap the setTimeout call in a try...catch",
+              "Wrap the code INSIDE the setTimeout callback in a try...catch",
+              "Use Promise.catch()",
+              "Errors in setTimeout cannot be caught"
+            ],
+            "correctAnswer": "Wrap the code INSIDE the setTimeout callback in a try...catch",
+            "difficulty": "Hard",
+            "explanation": "A try...catch block is synchronous. By the time the setTimeout callback runs on the Event Loop, the surrounding try...catch has already finished executing. The try...catch must be inside the callback."
+          }
+        ],
+        "order": 13
+      },
+      {
+        "title": "Generators and Iterators",
+        "order": 14,
+        "content": "<h2>Generators</h2><p>Generators are functions that can be exited and later re-entered. Defined using <code>function*</code> and the <code>yield</code> keyword.</p>",
+        "questions": [
+          {
+            "text": "What does the yield keyword do in a generator function?",
+            "options": [
+              "It permanently stops the function execution",
+              "It returns a value and pauses the execution of the generator",
+              "It throws an error",
+              "It forces garbage collection"
+            ],
+            "correctAnswer": "It returns a value and pauses the execution of the generator",
+            "difficulty": "Hard",
+            "explanation": "yield pauses the generator function and returns an IteratorResult object to the caller."
+          }
+        ]
+      },
+      {
+        "title": "Memory Management & Garbage Collection",
+        "order": 15,
+        "content": "<h2>Garbage Collection</h2><p>JavaScript automatically allocates memory when objects are created and frees it when they are not used anymore. The main algorithm used is Mark-and-Sweep.</p>",
+        "questions": [
+          {
+            "text": "Which algorithm is primarily used by modern JavaScript engines for garbage collection?",
+            "options": [
+              "Reference Counting",
+              "Mark-and-Sweep",
+              "First-In-First-Out",
+              "Memory Paging"
+            ],
+            "correctAnswer": "Mark-and-Sweep",
+            "difficulty": "Medium",
+            "explanation": "Modern engines use Mark-and-Sweep."
+          }
+        ]
+      },
+      {
+        "title": "Browser APIs & DOM",
+        "content": "<h2>The Browser</h2><p>DOM selection, traversal, manipulation, event bubbling/capturing, delegation, LocalStorage, Fetch API, and Web Workers.</p>",
+        "questions": [
+          {
+            "text": "What is Event Delegation?",
+            "options": [
+              "Passing events to a web worker",
+              "Attaching a single event listener to a parent element to handle events from multiple children",
+              "Preventing the default action of an event",
+              "Stopping event propagation entirely"
+            ],
+            "correctAnswer": "Attaching a single event listener to a parent element to handle events from multiple children",
+            "difficulty": "Medium",
+            "explanation": "Event delegation leverages event bubbling to handle events efficiently at a higher level in the DOM tree."
+          }
+        ],
+        "order": 16
+      },
+      {
+        "title": "Regular Expressions",
+        "content": "<h2>Regex</h2><p>Patterns, character classes, quantifiers, groups, lookahead/lookbehind, and flags.</p>",
+        "questions": [
+          {
+            "text": "What does the 'g' flag do in a Regular Expression?",
+            "options": [
+              "Global search (finds all matches)",
+              "Case-insensitive search",
+              "Multiline search",
+              "Greedy match"
+            ],
+            "correctAnswer": "Global search (finds all matches)",
+            "difficulty": "Easy",
+            "explanation": "The 'g' flag tells the regex engine to search the entire string and return all matches, rather than stopping after the first match."
+          }
+        ],
+        "order": 17
+      },
+      {
+        "title": "JSON & Data Handling",
+        "content": "<h2>JSON</h2><p>JSON.parse(), JSON.stringify(), serialization, circular references, and data transformation.</p>",
+        "questions": [
+          {
+            "text": "What happens when you call JSON.stringify() on an object containing a circular reference?",
+            "options": [
+              "It throws a TypeError",
+              "It ignores the circular reference",
+              "It loops infinitely",
+              "It returns null"
+            ],
+            "correctAnswer": "It throws a TypeError",
+            "difficulty": "Medium",
+            "explanation": "JSON.stringify() cannot serialize circular structures and will throw a 'Converting circular structure to JSON' TypeError."
+          }
+        ],
+        "order": 18
+      },
+      {
+        "title": "Security",
+        "content": "<h2>Security</h2><p>XSS, CSRF, Prototype Pollution, CSP, Secure Cookies, CORS, and Same-Origin Policy.</p>",
+        "questions": [
+          {
+            "text": "What does CORS stand for?",
+            "options": [
+              "Cross-Origin Resource Sharing",
+              "Cross-Object Reference Security",
+              "Cascading Object Rendering System",
+              "Cross-Origin Routing System"
+            ],
+            "correctAnswer": "Cross-Origin Resource Sharing",
+            "difficulty": "Easy",
+            "explanation": "CORS is an HTTP-header based mechanism that allows a server to indicate any origins other than its own from which a browser should permit loading resources."
+          }
+        ],
+        "order": 19
+      },
+      {
+        "title": "Node.js-Specific JavaScript",
+        "content": "<h2>Node.js Specifics</h2><p>V8 Engine, Node Event Loop, Streams, Buffers, global, process, and worker threads.</p>",
+        "questions": [
+          {
+            "text": "What is the global object equivalent to the browser's `window` in Node.js?",
+            "options": [
+              "global",
+              "window",
+              "document",
+              "process"
+            ],
+            "correctAnswer": "global",
+            "difficulty": "Easy",
+            "explanation": "In Node.js, the top-level scope is not the global scope (due to modules), but the `global` object serves as the global namespace."
+          }
+        ],
+        "order": 20
+      },
+      {
+        "title": "Interview Coding Topics",
+        "content": "<h2>Coding Questions</h2><p>String manipulation, arrays, flattening, deep cloning, grouping, chunking, and recursion.</p>",
+        "questions": [
+          {
+            "text": "Which array method is best for deeply flattening an array?",
+            "options": [
+              "Array.prototype.flat(Infinity)",
+              "Array.prototype.map()",
+              "Array.prototype.reduce()",
+              "Array.prototype.concat()"
+            ],
+            "correctAnswer": "Array.prototype.flat(Infinity)",
+            "difficulty": "Medium",
+            "explanation": "Calling flat() with Infinity as the depth parameter will recursively flatten an array of arbitrary depth."
+          }
+        ],
+        "order": 21
+      },
+      {
+        "title": "Output-Based Interview Questions",
+        "content": "<h2>Output-Based Questions</h2><p>Predicting the output of tricky code snippets involving hoisting, scope, closures, Promises, and the event loop.</p>",
+        "questions": [
+          {
+            "text": "What is the output of: `console.log(0.1 + 0.2 === 0.3)`?",
+            "options": [
+              "false",
+              "true",
+              "TypeError",
+              "undefined"
+            ],
+            "correctAnswer": "false",
+            "difficulty": "Medium",
+            "explanation": "Due to floating point precision in IEEE 754, 0.1 + 0.2 equals 0.30000000000000004, which is not strictly equal to 0.3."
+          }
+        ],
+        "order": 22
+      },
+      {
+        "title": "Polyfills",
+        "content": "<h2>Polyfills</h2><p>A polyfill is a piece of code (usually JavaScript on the Web) used to provide modern functionality on older browsers that do not natively support it.</p>",
+        "questions": [
+          {
+            "text": "When implementing a custom polyfill for Array.prototype.map, what is the most important rule about the return value?",
+            "options": [
+              "It must return a modified version of the original array",
+              "It must return a completely new array",
+              "It must return undefined",
+              "It must return a string"
+            ],
+            "correctAnswer": "It must return a completely new array",
+            "difficulty": "Medium",
+            "explanation": "The map() method always creates and returns a new array populated with the results."
+          }
+        ],
+        "order": 23
+      },
+      {
+        "title": "Debouncing and Throttling Implementation",
+        "content": "<h2>Advanced Optimization</h2><p>Writing custom debounce and throttle functions is a common interview task to test understanding of closures and setTimeout.</p>",
+        "questions": [
+          {
+            "text": "In a custom debounce function, what happens if the function is called again before the timeout completes?",
+            "options": [
+              "The function executes immediately",
+              "A second timeout is started in parallel",
+              "The previous timeout is cleared and a new one starts",
+              "The new call is completely ignored"
+            ],
+            "correctAnswer": "The previous timeout is cleared and a new one starts",
+            "difficulty": "Hard",
+            "explanation": "Debouncing resets the timer on every call using clearTimeout(timerId) so the function only runs after a period of inactivity."
+          }
+        ],
+        "order": 24
+      },
+      {
+        "title": "Deep Equality Implementation",
+        "content": "<h2>Deep Equals</h2><p>Writing a function to determine if two deeply nested objects or arrays are structurally identical.</p>",
+        "questions": [
+          {
+            "text": "When writing a deep equality function, what is the edge case when comparing two null values using typeof?",
+            "options": [
+              "typeof null is 'null'",
+              "typeof null is 'undefined'",
+              "typeof null is 'object'",
+              "typeof null throws an error"
+            ],
+            "correctAnswer": "typeof null is 'object'",
+            "difficulty": "Medium",
+            "explanation": "Because typeof null returns 'object', you must explicitly check if the value is null before treating it as a standard object in your deep equality logic."
+          }
+        ],
+        "order": 25
+      },
+      {
+        "title": "Event Emitter Implementation",
+        "content": "<h2>Publish/Subscribe Pattern</h2><p>Implementing a basic Event Emitter (pub/sub) class with 'on', 'emit', and 'off' methods.</p>",
+        "questions": [
+          {
+            "text": "In a custom Event Emitter, what data structure is best used to store the registered events and their callbacks?",
+            "options": [
+              "An array of strings",
+              "A Set of functions",
+              "An Object (or Map) where keys are event names and values are arrays of functions",
+              "A single callback function"
+            ],
+            "correctAnswer": "An Object (or Map) where keys are event names and values are arrays of functions",
+            "difficulty": "Hard",
+            "explanation": "You need a dictionary to map a specific event name to a list (array) of listener functions that should be executed when emitted."
+          }
+        ],
+        "order": 26
+      },
+      {
+        "title": "Promise Implementation",
+        "content": "<h2>Custom Promises</h2><p>Understanding how a Promise works under the hood by implementing custom resolve, reject, and then chaining mechanisms.</p>",
+        "questions": [
+          {
+            "text": "When implementing a custom Promise, how do you ensure the '.then' callbacks are executed asynchronously?",
+            "options": [
+              "By using a while loop",
+              "By wrapping the callback execution in setTimeout or queueMicrotask",
+              "By using the async keyword",
+              "By calling them immediately"
+            ],
+            "correctAnswer": "By wrapping the callback execution in setTimeout or queueMicrotask",
+            "difficulty": "Hard",
+            "explanation": "According to the Promise A+ spec, 'then' callbacks must not be executed synchronously. They must be deferred to a microtask queue or macro task queue."
+          }
+        ],
+        "order": 27
+      },
+      {
+        "title": "Hoisting Output Questions",
+        "content": "<h2>Hoisting in Practice</h2><p>Predicting the output of variables accessed before declaration.</p>",
+        "questions": [
+          {
+            "text": "What is the output of: `console.log(a); var a = 5;`?",
+            "options": [
+              "5",
+              "undefined",
+              "ReferenceError",
+              "null"
+            ],
+            "correctAnswer": "undefined",
+            "difficulty": "Easy",
+            "explanation": "With `var`, the declaration is hoisted to the top of the scope, but the initialization (= 5) is not."
+          }
+        ],
+        "order": 28
+      },
+      {
+        "title": "Event Loop Output Questions",
+        "content": "<h2>Event Loop execution order</h2><p>Predicting the exact execution order of sync code, Microtasks (Promises), and Macrotasks (setTimeout).</p>",
+        "questions": [
+          {
+            "text": "What is the output? `console.log(1); setTimeout(() => console.log(2), 0); Promise.resolve().then(() => console.log(3)); console.log(4);`",
+            "options": [
+              "1, 2, 3, 4",
+              "1, 4, 3, 2",
+              "1, 4, 2, 3",
+              "1, 3, 4, 2"
+            ],
+            "correctAnswer": "1, 4, 3, 2",
+            "difficulty": "Hard",
+            "explanation": "Synchronous code runs first (1, 4). Then Microtasks like Promises run (3). Finally, Macrotasks like setTimeout run (2)."
+          }
+        ],
+        "order": 29
+      },
+      {
+        "title": "Closure Output Questions",
+        "content": "<h2>Closures and Loops</h2><p>Predicting the output of callbacks inside loops referencing `var` vs `let`.</p>",
+        "questions": [
+          {
+            "text": "What is the output? `for (var i = 0; i < 3; i++) { setTimeout(() => console.log(i), 100); }`",
+            "options": [
+              "0, 1, 2",
+              "3, 3, 3",
+              "undefined, undefined, undefined",
+              "1, 2, 3"
+            ],
+            "correctAnswer": "3, 3, 3",
+            "difficulty": "Medium",
+            "explanation": "`var` is function-scoped. By the time the timeouts run, the loop has finished and `i` is 3. The callbacks all reference the same `i`."
+          }
+        ],
+        "order": 30
+      },
+      {
+        "title": "This Keyword Output Questions",
+        "content": "<h2>Context Prediction</h2><p>Determining what `this` evaluates to inside nested objects and arrow functions.</p>",
+        "questions": [
+          {
+            "text": "What is the output? `const obj = { name: 'Dev', getName: () => this.name }; console.log(obj.getName());`",
+            "options": [
+              "Dev",
+              "undefined",
+              "ReferenceError",
+              "null"
+            ],
+            "correctAnswer": "undefined",
+            "difficulty": "Medium",
+            "explanation": "Arrow functions do not bind their own `this`. They inherit `this` from the enclosing lexical scope (the global object window here), which doesn't have a `name` property."
+          }
+        ],
+        "order": 31
+      }
+    ]
+  },
+  {
+    "name": "React.js",
+    "description": "A JavaScript library for building user interfaces.",
+    "topics": [
+      {
+        "title": "Virtual DOM & Reconciliation",
+        "order": 1,
+        "content": "<h2>Virtual DOM</h2><p>React creates an in-memory data structure cache (the Virtual DOM), computes the resulting differences, and then updates the browser's displayed DOM efficiently.</p>",
+        "questions": [
+          {
+            "text": "What is the Virtual DOM in React?",
+            "options": [
+              "A direct copy of the real DOM used for CSS styling",
+              "An in-memory representation of the real DOM",
+              "A feature of HTML5",
+              "A new browser standard"
+            ],
+            "correctAnswer": "An in-memory representation of the real DOM",
+            "difficulty": "Medium",
+            "explanation": "React maintains a lightweight representation of the DOM in memory."
+          }
+        ]
+      },
+      {
+        "title": "Hooks in Depth",
+        "order": 2,
+        "content": "<h2>Common Hooks</h2><p>Hooks let you use state and other React features without writing a class.</p>",
+        "questions": [
+          {
+            "text": "How do you run a useEffect hook only once when the component mounts?",
+            "options": [
+              "Omit the dependency array",
+              "Pass an empty array [] as the second argument",
+              "Return a function from the effect",
+              "Use the useMount hook"
+            ],
+            "correctAnswer": "Pass an empty array [] as the second argument",
+            "difficulty": "Medium",
+            "explanation": "An empty dependency array tells React that your effect doesn’t depend on any values from props or state."
+          }
+        ]
+      },
+      {
+        "title": "React Suspense and Concurrent Mode",
+        "order": 3,
+        "content": "<h2>Suspense</h2><p><code>&lt;Suspense&gt;</code> lets your components 'wait' for something before they can render, showing a fallback UI while waiting.</p>",
+        "questions": [
+          {
+            "text": "What is a primary benefit of React's concurrent rendering?",
+            "options": [
+              "It reduces the JavaScript bundle size",
+              "It renders the UI faster by using multiple CPU threads",
+              "It allows React to pause rendering to handle high-priority events like user input",
+              "It completely eliminates the need for useEffect"
+            ],
+            "correctAnswer": "It allows React to pause rendering to handle high-priority events like user input",
+            "difficulty": "Hard",
+            "explanation": "Concurrent rendering makes the rendering process interruptible, ensuring the UI remains responsive during heavy updates."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Node.js",
+    "description": "An asynchronous event-driven JavaScript runtime designed to build scalable network applications.",
+    "topics": [
+      {
+        "title": "Event-Driven Architecture",
+        "order": 1,
+        "content": "<h2>Event Emitter</h2><p>Node.js is heavily built around an event-driven architecture. The <code>events</code> module provides an EventEmitter class that triggers events and handles callbacks.</p>",
+        "questions": [
+          {
+            "text": "Which core module in Node.js provides the EventEmitter class?",
+            "options": [
+              "http",
+              "fs",
+              "events",
+              "stream"
+            ],
+            "correctAnswer": "events",
+            "difficulty": "Medium",
+            "explanation": "The 'events' module exposes the EventEmitter class."
+          }
+        ]
+      },
+      {
+        "title": "Cluster Module and Worker Threads",
+        "order": 2,
+        "content": "<h2>Cluster vs Worker Threads</h2><p>The <code>cluster</code> module allows you to create child processes that share server ports. <code>worker_threads</code> allow you to run JavaScript in parallel threads, useful for CPU-intensive tasks.</p>",
+        "questions": [
+          {
+            "text": "When should you use worker_threads instead of the cluster module?",
+            "options": [
+              "To handle more concurrent HTTP requests",
+              "To share server ports",
+              "To perform CPU-intensive JavaScript operations",
+              "To access the DOM"
+            ],
+            "correctAnswer": "To perform CPU-intensive JavaScript operations",
+            "difficulty": "Hard",
+            "explanation": "Worker threads are designed for running CPU-intensive operations (like cryptography or image processing) in parallel without blocking the main event loop."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Next.js",
+    "description": "The React Framework for the Web, providing hybrid static & server rendering, and smart bundling.",
+    "topics": [
+      {
+        "title": "Server vs Client Components",
+        "order": 1,
+        "content": "<h2>App Router Architecture</h2><p>In the Next.js App Router, components are Server Components by default.</p>",
+        "questions": [
+          {
+            "text": "How do you explicitly declare a Client Component in the Next.js App Router?",
+            "options": [
+              "export default ClientComponent;",
+              "By using the 'use client' directive at the top of the file",
+              "By placing it in the /client directory",
+              "By using the useEffect hook"
+            ],
+            "correctAnswer": "By using the 'use client' directive at the top of the file",
+            "difficulty": "Easy",
+            "explanation": "The 'use client' directive marks a file boundary where Next.js switches from Server to Client rendering."
+          }
+        ]
+      },
+      {
+        "title": "Server Actions and Mutations",
+        "order": 2,
+        "content": "<h2>Server Actions</h2><p>Asynchronous functions that run on the server. They can be called directly from Client Components (via form actions or event handlers) to mutate data without needing to create API endpoints manually.</p>",
+        "questions": [
+          {
+            "text": "What is a primary advantage of using Server Actions in Next.js?",
+            "options": [
+              "They allow you to write CSS in JS",
+              "They eliminate the need to manually create API routes for data mutations",
+              "They run faster on the client side",
+              "They replace Redux"
+            ],
+            "correctAnswer": "They eliminate the need to manually create API routes for data mutations",
+            "difficulty": "Medium",
+            "explanation": "Server actions allow you to execute server-side code directly from client interactions without setting up intermediary API routes."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "TypeScript",
+    "description": "A strongly typed programming language that builds on JavaScript, giving you better tooling at any scale.",
+    "topics": [
+      {
+        "title": "Interfaces vs Types",
+        "order": 1,
+        "content": "<h2>Interfaces and Type Aliases</h2><p>Both can be used to describe the shape of an object. Interfaces are better for public API definitions because they support declaration merging, whereas types can be used for unions, primitives, and mapped types.</p>",
+        "questions": [
+          {
+            "text": "Which feature is unique to Interfaces and cannot be done with Type Aliases?",
+            "options": [
+              "Creating Union Types",
+              "Declaration Merging",
+              "Intersection Types",
+              "Defining Primitive Aliases"
+            ],
+            "correctAnswer": "Declaration Merging",
+            "difficulty": "Medium",
+            "explanation": "Interfaces with the same name in the same scope will merge their declarations, which is highly useful for extending third-party libraries. Type aliases will throw an error."
+          }
+        ]
+      },
+      {
+        "title": "Generics",
+        "order": 2,
+        "content": "<h2>Understanding Generics</h2><p>Generics allow you to create reusable components that can work over a variety of types rather than a single one.</p>",
+        "questions": [
+          {
+            "text": "What does <T> typically represent in TypeScript?",
+            "options": [
+              "A special HTML tag",
+              "A generic type parameter",
+              "A Tuple declaration",
+              "A throwing function"
+            ],
+            "correctAnswer": "A generic type parameter",
+            "difficulty": "Easy",
+            "explanation": "T is commonly used as a placeholder variable for a Generic Type."
+          }
+        ]
+      },
+      {
+        "title": "Utility Types & Mapped Types",
+        "order": 3,
+        "content": "<h2>Utility Types</h2><p>TypeScript provides several utility types (Partial, Pick, Omit, Record) to facilitate common type transformations.</p><h2>Mapped Types</h2><p>A mapped type is a generic type which uses a union of PropertyKeys (frequently created via a keyof) to iterate through keys to create a type.</p>",
+        "questions": [
+          {
+            "text": "Which utility type constructs a type with all properties of T set to optional?",
+            "options": [
+              "Omit<T>",
+              "Partial<T>",
+              "Readonly<T>",
+              "Pick<T>"
+            ],
+            "correctAnswer": "Partial<T>",
+            "difficulty": "Medium",
+            "explanation": "Partial<T> returns a type representing all subsets of a given type."
+          },
+          {
+            "text": "What does the `keyof` operator do?",
+            "options": [
+              "Returns the value of a key",
+              "Takes an object type and produces a string or numeric literal union of its keys",
+              "Iterates over an array",
+              "Checks if a key exists in an object at runtime"
+            ],
+            "correctAnswer": "Takes an object type and produces a string or numeric literal union of its keys",
+            "difficulty": "Hard",
+            "explanation": "The keyof operator produces a union type of all public property names of a given type."
+          }
+        ]
+      },
+      {
+        "title": "Type Guards & Narrowing",
+        "order": 4,
+        "content": "<h2>Narrowing</h2><p>TypeScript can narrow types down to more specific types using type guards like <code>typeof</code>, <code>instanceof</code>, or custom type predicate functions returning <code>arg is Type</code>.</p>",
+        "questions": [
+          {
+            "text": "How do you define a custom type guard in TypeScript?",
+            "options": [
+              "By returning a boolean",
+              "By using the `is` keyword in the return type (e.g., `animal is Fish`)",
+              "By using the `as` keyword",
+              "By throwing an Error on type mismatch"
+            ],
+            "correctAnswer": "By using the `is` keyword in the return type (e.g., `animal is Fish`)",
+            "difficulty": "Hard",
+            "explanation": "A custom type guard function must return a type predicate in the form `parameterName is Type`."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "MongoDB",
+    "description": "A document-based, NoSQL database program that uses JSON-like documents with optional schemas.",
+    "topics": [
+      {
+        "title": "NoSQL Concepts & Documents",
+        "order": 1,
+        "content": "<h2>Document Model</h2><p>MongoDB stores data in flexible, JSON-like documents. This means fields can vary from document to document and data structure can be changed over time.</p>",
+        "questions": [
+          {
+            "text": "In MongoDB, a single record is called a:",
+            "options": [
+              "Row",
+              "Table",
+              "Document",
+              "Collection"
+            ],
+            "correctAnswer": "Document",
+            "difficulty": "Easy",
+            "explanation": "In MongoDB, data is stored in BSON Documents (binary JSON), analogous to rows in a relational database."
+          }
+        ]
+      },
+      {
+        "title": "Aggregation Framework",
+        "order": 2,
+        "content": "<h2>Aggregations</h2><p>The aggregation pipeline is a framework for data aggregation modeled on the concept of data processing pipelines. Documents enter a multi-stage pipeline that transforms the documents into aggregated results.</p>",
+        "questions": [
+          {
+            "text": "Which aggregation stage is used to filter documents?",
+            "options": [
+              "$group",
+              "$match",
+              "$project",
+              "$sort"
+            ],
+            "correctAnswer": "$match",
+            "difficulty": "Medium",
+            "explanation": "$match filters the documents to pass only the documents that match the specified condition(s) to the next pipeline stage."
+          }
+        ]
+      },
+      {
+        "title": "Indexing & Performance",
+        "order": 3,
+        "content": "<h2>Indexes</h2><p>Indexes support the efficient execution of queries in MongoDB. Without indexes, MongoDB must perform a collection scan, i.e. scan every document in a collection, to select those documents that match the query statement.</p>",
+        "questions": [
+          {
+            "text": "Which of the following is true about Compound Indexes?",
+            "options": [
+              "They can only contain two fields",
+              "The order of fields in the index does not matter",
+              "The order of fields matters due to the ESR (Equality, Sort, Range) rule",
+              "They are created automatically for every collection"
+            ],
+            "correctAnswer": "The order of fields matters due to the ESR (Equality, Sort, Range) rule",
+            "difficulty": "Hard",
+            "explanation": "In compound indexes, field order is crucial. The ESR rule is a guideline for ordering fields: Equality first, then Sort, then Range."
+          }
+        ]
+      },
+      {
+        "title": "Replication & Sharding",
+        "order": 4,
+        "content": "<h2>Scaling MongoDB</h2><p><strong>Replication (Replica Sets):</strong> Provides redundancy and high availability.<br/><strong>Sharding:</strong> Distributes data across multiple machines (Horizontal scaling).</p>",
+        "questions": [
+          {
+            "text": "In a MongoDB Replica Set, what happens if the Primary node goes down?",
+            "options": [
+              "The database becomes completely inaccessible forever",
+              "An election is held among the Secondary nodes to choose a new Primary",
+              "A Secondary node is randomly assigned without an election",
+              "Data is lost"
+            ],
+            "correctAnswer": "An election is held among the Secondary nodes to choose a new Primary",
+            "difficulty": "Medium",
+            "explanation": "Replica sets provide automatic failover through an election process."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "System Design",
+    "description": "The process of defining the architecture, modules, interfaces, and data for a system to satisfy specified requirements.",
+    "topics": [
+      {
+        "title": "Scaling: Vertical vs Horizontal",
+        "order": 1,
+        "content": "<h2>Scaling Methods</h2><p><strong>Vertical Scaling (Scale-Up):</strong> Adding more power (CPU, RAM) to your existing machine.<br/><strong>Horizontal Scaling (Scale-Out):</strong> Adding more machines to your pool of resources.</p>",
+        "questions": [
+          {
+            "text": "What is a primary disadvantage of Vertical Scaling?",
+            "options": [
+              "It requires rewriting the codebase",
+              "It has a hard hardware limit and creates a single point of failure",
+              "It requires complex load balancers",
+              "Data consistency is difficult to maintain"
+            ],
+            "correctAnswer": "It has a hard hardware limit and creates a single point of failure",
+            "difficulty": "Medium",
+            "explanation": "You can only add so much RAM or CPU to one machine, and if that machine goes down, the entire system is down."
+          }
+        ]
+      },
+      {
+        "title": "Caching Strategies",
+        "order": 2,
+        "content": "<h2>Caching</h2><p>Caching stores copies of frequently accessed data in a temporary, fast-access storage layer (like Redis or Memcached). Strategies include Cache-Aside, Read-Through, and Write-Through.</p>",
+        "questions": [
+          {
+            "text": "In the Cache-Aside pattern, what happens when a cache miss occurs?",
+            "options": [
+              "The cache automatically fetches data from the DB",
+              "The application queries the DB, returns the data, and writes it to the cache",
+              "The request is rejected",
+              "The database writes it to the cache directly"
+            ],
+            "correctAnswer": "The application queries the DB, returns the data, and writes it to the cache",
+            "difficulty": "Hard",
+            "explanation": "In Cache-Aside, the application code is responsible for checking the cache, querying the database on a miss, and then updating the cache."
+          }
+        ]
+      },
+      {
+        "title": "Message Queues & Event-Driven Architecture",
+        "order": 3,
+        "content": "<h2>Asynchronous Processing</h2><p>Message queues (like RabbitMQ, Kafka, SQS) are used to decouple heavy processing, to buffer or batch work, and to smooth spiky workloads.</p>",
+        "questions": [
+          {
+            "text": "Which of the following best describes Apache Kafka?",
+            "options": [
+              "An in-memory caching store",
+              "A relational database",
+              "A distributed event streaming platform",
+              "A frontend framework"
+            ],
+            "correctAnswer": "A distributed event streaming platform",
+            "difficulty": "Medium",
+            "explanation": "Kafka is optimized for high-throughput, low-latency event streaming and log aggregation."
+          }
+        ]
+      },
+      {
+        "title": "CAP Theorem",
+        "order": 4,
+        "content": "<h2>The CAP Theorem</h2><p>States that it is impossible for a distributed data store to simultaneously provide more than two out of the following three guarantees: Consistency, Availability, and Partition tolerance.</p>",
+        "questions": [
+          {
+            "text": "In the context of the CAP Theorem, what does Partition Tolerance mean?",
+            "options": [
+              "The system can be divided into smaller tables",
+              "The system continues to operate despite an arbitrary number of messages being dropped/delayed by the network",
+              "The data is partitioned equally across disks",
+              "Every read receives the most recent write"
+            ],
+            "correctAnswer": "The system continues to operate despite an arbitrary number of messages being dropped/delayed by the network",
+            "difficulty": "Hard",
+            "explanation": "Partition tolerance implies the system functions even if network partitions occur."
+          },
+          {
+            "text": "Which combination does a typical relational database (like PostgreSQL) prioritize?",
+            "options": [
+              "AP (Availability & Partition Tolerance)",
+              "CA (Consistency & Availability)",
+              "CP (Consistency & Partition Tolerance)",
+              "None of the above"
+            ],
+            "correctAnswer": "CA (Consistency & Availability)",
+            "difficulty": "Hard",
+            "explanation": "Traditional RDBMS prioritize Consistency and Availability, but generally fail under network partitions (they are not typically distributed by default)."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Python",
+    "description": "An interpreted, high-level, general-purpose programming language.",
+    "topics": [
+      {
+        "title": "Lists vs Tuples",
+        "order": 1,
+        "content": "<h2>Data Structures</h2><p>Lists are mutable sequences, meaning their elements can be changed after creation. Tuples are immutable sequences.</p>",
+        "questions": [
+          {
+            "text": "Which of the following is true about Tuples in Python?",
+            "options": [
+              "They are mutable",
+              "They are immutable",
+              "They can only contain integers",
+              "They are declared using square brackets []"
+            ],
+            "correctAnswer": "They are immutable",
+            "difficulty": "Easy",
+            "explanation": "Tuples cannot be modified after they are created."
+          }
+        ]
+      },
+      {
+        "title": "Decorators",
+        "order": 2,
+        "content": "<h2>Decorators</h2><p>A decorator is a design pattern in Python that allows a user to add new functionality to an existing object without modifying its structure.</p>",
+        "questions": [
+          {
+            "text": "Which symbol is used to apply a decorator in Python?",
+            "options": [
+              "#",
+              "$",
+              "@",
+              "%"
+            ],
+            "correctAnswer": "@",
+            "difficulty": "Medium",
+            "explanation": "The @ symbol is syntactic sugar for passing a function into another function (the decorator)."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "SQL",
+    "description": "Structured Query Language for storing, manipulating and retrieving data in databases.",
+    "topics": [
+      {
+        "title": "JOINs",
+        "order": 1,
+        "content": "<h2>SQL JOINs</h2><p>A JOIN clause is used to combine rows from two or more tables, based on a related column between them.</p>",
+        "questions": [
+          {
+            "text": "Which JOIN returns all records when there is a match in either left or right table?",
+            "options": [
+              "INNER JOIN",
+              "LEFT JOIN",
+              "RIGHT JOIN",
+              "FULL OUTER JOIN"
+            ],
+            "correctAnswer": "FULL OUTER JOIN",
+            "difficulty": "Medium",
+            "explanation": "FULL OUTER JOIN returns all matching records from both tables whether the other table matches or not."
+          }
+        ]
+      }
+    ]
+  }
+]
